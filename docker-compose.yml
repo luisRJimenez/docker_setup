@@ -1,0 +1,88 @@
+version: "3.7"
+
+services:
+    api:
+        container_name: api
+        build: ./docker_configs/api
+        restart: unless-stopped
+        volumes:
+            - ./projects/api_commerce:/var/www
+        ports:
+            - 9000:80
+        networks:
+            - commerce_environment
+
+    backoffice:
+        container_name: backoffice
+        build: ./docker_configs/backoffice
+        restart: unless-stopped
+        volumes:
+            - ./projects/backoffice:/usr/src/backoffice
+        ports:
+            - 5000:80
+        networks:
+            - commerce_environment
+        command: ash -c "npm install && ng serve --host 0.0.0.0 --port 80"
+
+    nginx:
+        container_name: nginx
+        build: ./docker_configs/nginx
+        restart: unless-stopped
+        links:
+            - api
+            - backoffice
+        volumes:
+            - ./projects/backoffice:/usr/src/backoffice
+            - ./projects/api_commerce:/var/www
+        ports:
+            - 80:80
+            - 443:443
+        networks:
+            - commerce_environment
+
+    mysql_database:
+        container_name: mysql_database
+        image: mysql:8.0.29
+        restart: always
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: commerce
+            MYSQL_USER: dev
+            MYSQL_PASSWORD: dev
+        networks:
+            - commerce_environment
+        command: --default-authentication-plugin=mysql_native_password
+
+    phpmyadmin:
+        container_name: phpmyadmin
+        image: phpmyadmin:5.1.1
+        restart: always
+        ports:
+            - 8080:80
+        volumes:
+            - ./docker_configs/phpmyadmin/themes:/var/www/html/themes
+        environment:
+            - PMA_HOST=mysql_database
+            - PMA_USER=root
+            - PMA_PASSWORD=root
+        networks:
+            - commerce_environment
+
+networks:
+    commerce_environment:
+        driver: bridge
+
+
+# store:
+#     container_name: store
+#     build: ./docker_configs/store
+#     restart: unless-stopped
+#     volumes:
+#         - ./projects/store:/usr/src/store
+#     ports:
+#         - 7000:80
+#     networks:
+#         - commerce_environment
+#     command: ash -c "npm install && ng serve --host 0.0.0.0 --port 80"
