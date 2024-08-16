@@ -1,27 +1,27 @@
 version: "3.7"
 
 services:
-    api:
-        container_name: api
-        build: ./docker_configs/api
+    laravel_api:
+        container_name: laravel_api
+        build: ./docker_configs/laravel_api
         restart: unless-stopped
         volumes:
-            - ./projects/api_commerce:/var/www
+            - ./projects/laravel_api:/var/www
         ports:
             - 9000:80
         networks:
-            - commerce_environment
+            - cs_inventory_environment
 
-    backoffice:
-        container_name: backoffice
-        build: ./docker_configs/backoffice
+    angular_website:
+        container_name: angular_website
+        build: ./docker_configs/angular_website
         restart: unless-stopped
         volumes:
-            - ./projects/backoffice:/usr/src/backoffice
+            - ./projects/angular_website:/usr/src/angular_website
         ports:
             - 5000:80
         networks:
-            - commerce_environment
+            - cs_inventory_environment
         command: ash -c "npm install && ng serve --host 0.0.0.0 --port 80"
 
     nginx:
@@ -29,16 +29,30 @@ services:
         build: ./docker_configs/nginx
         restart: unless-stopped
         links:
-            - api
-            - backoffice
+            - laravel_api
+            - angular_website
+            - node_scraper
         volumes:
-            - ./projects/backoffice:/usr/src/backoffice
-            - ./projects/api_commerce:/var/www
+            - ./projects/angular_website:/usr/src/angular_website
+            - ./projects/laravel_api:/var/www
+            - ./projects/node_scraper:/usr/src/node_scraper
         ports:
             - 80:80
             - 443:443
         networks:
-            - commerce_environment
+            - cs_inventory_environment
+
+    node_scraper:
+        container_name: node_scraper
+        build: ./docker_configs/node_scraper
+        restart: unless-stopped
+        volumes:
+            - ./projects/node_scraper:/usr/src/node_scraper
+        ports:
+            - 7000:80
+        networks:
+            - cs_inventory_environment
+        command: ash -c "npm install && npm run watch"
 
     mysql_database:
         container_name: mysql_database
@@ -48,11 +62,11 @@ services:
             - 3306:3306
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: commerce
+            MYSQL_DATABASE: example_database
             MYSQL_USER: dev
             MYSQL_PASSWORD: dev
         networks:
-            - commerce_environment
+            - cs_inventory_environment
         command: --default-authentication-plugin=mysql_native_password
 
     phpmyadmin:
@@ -68,21 +82,8 @@ services:
             - PMA_USER=root
             - PMA_PASSWORD=root
         networks:
-            - commerce_environment
+            - cs_inventory_environment
 
 networks:
-    commerce_environment:
+    cs_inventory_environment:
         driver: bridge
-
-
-# store:
-#     container_name: store
-#     build: ./docker_configs/store
-#     restart: unless-stopped
-#     volumes:
-#         - ./projects/store:/usr/src/store
-#     ports:
-#         - 7000:80
-#     networks:
-#         - commerce_environment
-#     command: ash -c "npm install && ng serve --host 0.0.0.0 --port 80"
