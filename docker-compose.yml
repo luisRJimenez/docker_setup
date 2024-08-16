@@ -10,7 +10,7 @@ services:
         ports:
             - 9000:80
         networks:
-            - cs_inventory_environment
+            - example_envrionment_network
 
     angular_website:
         container_name: angular_website
@@ -21,7 +21,7 @@ services:
         ports:
             - 5000:80
         networks:
-            - cs_inventory_environment
+            - example_envrionment_network
         command: ash -c "npm install && ng serve --host 0.0.0.0 --port 80"
 
     nginx:
@@ -40,7 +40,7 @@ services:
             - 80:80
             - 443:443
         networks:
-            - cs_inventory_environment
+            - example_envrionment_network
 
     node_scraper:
         container_name: node_scraper
@@ -51,7 +51,7 @@ services:
         ports:
             - 7000:80
         networks:
-            - cs_inventory_environment
+            - example_envrionment_network
         command: ash -c "npm install && npm run watch"
 
     mysql_database:
@@ -66,7 +66,7 @@ services:
             MYSQL_USER: dev
             MYSQL_PASSWORD: dev
         networks:
-            - cs_inventory_environment
+            - example_envrionment_network
         command: --default-authentication-plugin=mysql_native_password
 
     phpmyadmin:
@@ -82,8 +82,8 @@ services:
             - PMA_USER=root
             - PMA_PASSWORD=root
         networks:
-            - cs_inventory_environment
+            - example_envrionment_network
 
 networks:
-    cs_inventory_environment:
+    example_envrionment_network:
         driver: bridge
