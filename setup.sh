@@ -52,6 +52,8 @@ docker exec -it angular_website npm install
 
 create_api_env_file
 
+sleep 5
+
 docker exec -it laravel_api php artisan migrate:refresh
 
 docker exec -it laravel_api php artisan db:seed
