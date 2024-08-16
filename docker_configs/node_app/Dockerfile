@@ -2,9 +2,9 @@ FROM node:20.15.1-alpine3.19
 
 ARG user=node
 
-RUN mkdir -p /usr/src/node_scraper/node_modules && chown -R $user:$user /usr/src/node_scraper
+RUN mkdir -p /usr/src/node_app/node_modules && chown -R $user:$user /usr/src/node_app
 
-WORKDIR /usr/src/node_scraper
+WORKDIR /usr/src/node_app
 
 COPY --chown=$user:$user . .
 

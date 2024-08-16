@@ -31,28 +31,29 @@ services:
         links:
             - laravel_api
             - angular_website
-            - node_scraper
+            #- node_app
         volumes:
             - ./projects/angular_website:/usr/src/angular_website
             - ./projects/laravel_api:/var/www
-            - ./projects/node_scraper:/usr/src/node_scraper
+            #- ./projects/node_app:/usr/src/node_app
         ports:
             - 80:80
             - 443:443
         networks:
             - example_envrionment_network
 
-    node_scraper:
-        container_name: node_scraper
-        build: ./docker_configs/node_scraper
-        restart: unless-stopped
-        volumes:
-            - ./projects/node_scraper:/usr/src/node_scraper
-        ports:
-            - 7000:80
-        networks:
-            - example_envrionment_network
-        command: ash -c "npm install && npm run watch"
+    #Use this only if you want to initialize a node container 
+    # node_app:
+    #     container_name: node_app
+    #     build: ./docker_configs/node_app
+    #     restart: unless-stopped
+    #     volumes:
+    #         - ./projects/node_app:/usr/src/node_app
+    #     ports:
+    #         - 7000:80
+    #     networks:
+    #         - example_envrionment_network
+    #     command: ash -c "npm install && npm run watch"
 
     mysql_database:
         container_name: mysql_database

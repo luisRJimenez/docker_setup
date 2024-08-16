@@ -7,7 +7,7 @@ APPLICATIONS_DIRECTORY="./projects"
 
 if [ ! -d "$APPLICATIONS_DIRECTORY" ]; then
     echo "\n Creating applications directory and apps directories \n"
-    mkdir -p projects/angular_website projects/laravel_api projects/node_scraper
+    mkdir -p projects/angular_website projects/laravel_api projects/node_app
     chmod 755 projects/
 else
     echo "\n The directories already exists \n"
@@ -38,7 +38,7 @@ create_api_env_file()
 git clone git@github.com:igorcfreittas/API_docker_template.git projects/laravel_api
 
 #Replace this with your angular frontend ssh
-git clone git@gitlab.com:igorcfreittas/backoffice.git projects/angular_website
+git clone git@github.com:igorcfreittas/frontend_docker_template.git projects/angular_website
 
 #git clone end...
 
@@ -56,4 +56,4 @@ docker exec -it laravel_api php artisan migrate:refresh
 
 docker exec -it laravel_api php artisan db:seed
 
-#Console MODE Node Scraper: watch -n 0 "docker logs node_scraper"
+#Console MODE Node app: watch -n 0 "docker logs node_app"
