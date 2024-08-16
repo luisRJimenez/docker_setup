@@ -1,4 +1,4 @@
-version: "3.7"
+name: angular_laravel_mysql_phpmyadmin_nginx
 
 services:
     laravel_api:
@@ -10,7 +10,7 @@ services:
         ports:
             - 9000:80
         networks:
-            - example_envrionment_network
+            - envrionment_network
 
     angular_website:
         container_name: angular_website
@@ -21,7 +21,7 @@ services:
         ports:
             - 5000:80
         networks:
-            - example_envrionment_network
+            - envrionment_network
         command: ash -c "npm install && ng serve --host 0.0.0.0 --port 80"
 
     nginx:
@@ -40,7 +40,7 @@ services:
             - 80:80
             - 443:443
         networks:
-            - example_envrionment_network
+            - envrionment_network
 
     #Use this only if you want to initialize a node container 
     # node_app:
@@ -52,7 +52,7 @@ services:
     #     ports:
     #         - 7000:80
     #     networks:
-    #         - example_envrionment_network
+    #         - envrionment_network
     #     command: ash -c "npm install && npm run watch"
 
     mysql_database:
@@ -67,7 +67,7 @@ services:
             MYSQL_USER: dev
             MYSQL_PASSWORD: dev
         networks:
-            - example_envrionment_network
+            - envrionment_network
         command: --default-authentication-plugin=mysql_native_password
 
     phpmyadmin:
@@ -83,8 +83,8 @@ services:
             - PMA_USER=root
             - PMA_PASSWORD=root
         networks:
-            - example_envrionment_network
+            - envrionment_network
 
 networks:
-    example_envrionment_network:
+    envrionment_network:
         driver: bridge
