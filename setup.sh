@@ -34,11 +34,11 @@ create_api_env_file()
 
 #Configure your SSH key to use this commands
 
-#Replace this with your laravel API ssh
-git clone git@github.com:igorcfreittas/API_docker_template.git projects/laravel_api
+#Laravel API
+git clone https://github.com/igorcfreittas/API_docker_template.git projects/laravel_api
 
-#Replace this with your angular frontend ssh
-git clone git@github.com:igorcfreittas/frontend_docker_template.git projects/angular_website
+#Angular Frontend
+git clone https://github.com/igorcfreittas/frontend_docker_template.git projects/angular_website
 
 #git clone end...
 
