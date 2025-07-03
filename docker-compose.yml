@@ -7,10 +7,10 @@ services:
         restart: unless-stopped
         volumes:
             - ./projects/laravel_api:/var/www
-        ports:
-            - 9000:80
+        #ports:
+        #    - 9100:80
         networks:
-            - envrionment_network
+            - environment_network
 
     angular_website:
         container_name: angular_website
@@ -21,8 +21,8 @@ services:
         ports:
             - 5000:80
         networks:
-            - envrionment_network
-        command: ash -c "npm install && ng serve --host 0.0.0.0 --port 80"
+            - environment_network
+        command: sh -c "npm install && ng serve --host 0.0.0.0 --port 80"
 
     nginx:
         container_name: nginx
@@ -37,10 +37,10 @@ services:
             - ./projects/laravel_api:/var/www
             #- ./projects/node_app:/usr/src/node_app
         ports:
-            - 80:80
-            - 443:443
+            - 9100:80
+            - 444:443
         networks:
-            - envrionment_network
+            - environment_network
 
     #Use this only if you want to initialize a node container 
     # node_app:
@@ -67,7 +67,7 @@ services:
             MYSQL_USER: dev
             MYSQL_PASSWORD: dev
         networks:
-            - envrionment_network
+            - environment_network
         command: --default-authentication-plugin=mysql_native_password
 
     phpmyadmin:
@@ -75,7 +75,7 @@ services:
         image: phpmyadmin:5.1.1
         restart: always
         ports:
-            - 8080:80
+            - 8090:80
         volumes:
             - ./docker_configs/phpmyadmin/themes:/var/www/html/themes
         environment:
@@ -83,8 +83,8 @@ services:
             - PMA_USER=root
             - PMA_PASSWORD=root
         networks:
-            - envrionment_network
+            - environment_network
 
 networks:
-    envrionment_network:
+    environment_network:
         driver: bridge

@@ -20,7 +20,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN useradd -G www-data,root -u $user_id -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && chown -R $user:$user /home/$user
+RUN mkdir -p /var/www && chown -R $user:$user /var/www
 
 WORKDIR /var/www
 
 USER $user
+
+RUN git config --global --add safe.directory /var/www
